@@ -968,8 +968,23 @@ function showReview() {
   document.getElementById('review-wrapper').style.display = 'block';
   questionEl.textContent = '';
   optionsEl.innerHTML = '';
-  resultEl.textContent = `You did them all! Score: ${score}/${perguntas.length}`;
+  resultEl.textContent = ``;
   resultEl.style.color = "black";
+
+  const totalPerguntas = perguntas.length;
+  const valorPergunta = 20 / totalPerguntas;
+  const erros = respostasErradas.length;
+  const acertos = score;
+
+  // Calculo da nota final
+  let notaFinal = acertos * valorPergunta - erros * (valorPergunta / 3);
+  if (notaFinal < 0) notaFinal = 0;
+
+  // Mostrar resultados
+  resultEl.textContent = `You did them all! Acertaste: ${score}/${perguntas.length} \n Nota final: ${notaFinal.toFixed(2)} / 20`;
+
+  reviewEl.innerHTML = '';
+
 
   if (respostasErradas.length > 0) {
     reviewEl.innerHTML = "<h3>O que falhaste:</h3>";
