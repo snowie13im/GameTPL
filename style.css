@@ -48,8 +48,6 @@ button.option:hover {
   text-align: center;
 }
 
-/* Container com altura fixa e scroll */
-
 .review-wrapper {
   max-height: 300px;
   margin-top: 2rem;
@@ -58,7 +56,7 @@ button.option:hover {
   background: #f9fafb;
   border-radius: 0.5rem;
   padding: 1rem;
-  display: none; /* inicial */
+  display: none;
 }
 
 
@@ -70,8 +68,8 @@ button.option:hover {
   border: 0px solid #ef4444;
   padding: 1rem;
   border-radius: 0.5rem;
-  max-height: 250px;   /* Altura fixa */
-  overflow-y: auto;    /* Scroll vertical se precisar */
+  max-height: 250px; 
+  overflow-y: auto;  
   background: #f9fafb;
 }
 
@@ -83,7 +81,6 @@ button.option:hover {
   margin-bottom: 1rem;
 }
   
-/* Botão de repetir centralizado */
 .review #restart {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;

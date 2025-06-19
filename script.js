@@ -236,7 +236,7 @@ function mixin(array) {
           "O consumível é todo o material que se emprega apenas na proteção da soldadura.",
           "O consumível é todo o material que se funde e dá origem a uma soldadura."
         ],
-        correta: "O consumível é todo o material que se funde e dá origem a uma soldadura."
+        correta: "O consumível é todo o material que se emprega na deposição ou proteção da soldadura."
       },
       {
         pergunta: "Assinale a alternativa INCORRETA quanto à função do revestimento do eletrodo:",
@@ -1008,7 +1008,7 @@ function stopQuiz() {
     reviewEl.innerHTML = "<p>Yipeeeee, estás a acertar tudo!</p>";
   }
 
-  // Botão de reiniciar (opcional)
+  // Botão de reiniciar
   const restartBtn = document.createElement('button');
   restartBtn.id = "restart";
   restartBtn.textContent = "Recomeçar";
