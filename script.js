@@ -393,7 +393,7 @@ function mixin(array) {
           "As 2 primeiras são falsas.",
           "Pelo menos, uma é verdadeira."
         ],
-        correta: "Pelo menos, uma é verdadeira."
+        correta: "As 2 primeiras são falsas."
       },
       {
       pergunta: "Na soldadura TIG, o efeito de estrição térmica, …",
@@ -403,7 +403,7 @@ function mixin(array) {
           "… permite aumentar a largura do banho de fusão.",
           "… permite diminuir a penetração e facilitar a soldadura de chapas finas."
         ],
-        correta: "é conseguido através da dimensão do diâmetro do bocal de passagem do caudal e do gás de proteção."
+        correta: "… é conseguido através da dimensão do diâmetro do bocal de passagem do caudal e do gás de proteção."
       },
       {
         pergunta: "Atualmente existem vários processos de soldadura. De entre eles, há os que fazem proteção de arco e do banho de fusão de um gás ou mistura de gases inertes. Quais são os melhores que correspondem?",
