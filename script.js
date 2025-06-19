@@ -898,122 +898,135 @@ function mixin(array) {
       // Podes adicionar mais perguntas aqui...
     ]);
 
-    let current = 0;             // índice da pergunta atual
-    let score = 0;               // contador de respostas corretas
-    const respostasErradas = []; // vai guardar as respostas erradas para revisão
+let current = 0;
+let score = 0;
+const respostasErradas = [];
 
-    // elementos HTML que vamos manipular
-    const questionEl = document.getElementById('question');
-    const optionsEl = document.getElementById('options');
-    const resultEl = document.getElementById('result');
-    const reviewEl = document.getElementById('review');
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const resultEl = document.getElementById('result');
+const reviewEl = document.getElementById('review');
+const nextBtn = document.getElementById('next');
+// Mostra a pergunta com numeração
+function showQuestion() {
+    document.getElementById('review-wrapper').style.display = 'none';
+  resultEl.textContent = '';
+  reviewEl.innerHTML = '';
 
-    // Função para mostrar a pergunta atual e as opções
-    function showQuestion() {
-      // Limpa resultados anteriores
-      resultEl.textContent = '';
-      reviewEl.innerHTML = '';
+  const q = perguntas[current];
+  const numeroAtual = current + 1;
+  const total = perguntas.length;
+  questionEl.textContent = `Pergunta ${numeroAtual} de ${total}: ${q.pergunta}`;
 
-      // Pega a pergunta atual
-
-      const q = perguntas[current];
-      const numeroAtual = current + 1;
-      const total = perguntas.length;
-
-      // Mostra pergunta com numeração
-      questionEl.textContent = `Pergunta ${numeroAtual} de ${total}: ${q.pergunta}`;
-
-      // Embaralha as opções para não aparecer sempre na mesma ordem
-      const shuffledOptions = [...q.opcoes].sort(() => Math.random() - 0.5);
-
-      // Limpa opções antigas
-      optionsEl.innerHTML = '';
-
-      // Cria botões para cada opção
-      shuffledOptions.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = opt;
-        btn.onclick = () => selectAnswer(opt, q);
-        optionsEl.appendChild(btn);
-      });
-    }
-
-    // Função para tratar a escolha do utilizador
-    function selectAnswer(selected, question) {
-      // Verifica se está correta
-      if (selected === question.correta) {
-        score++;
-      } else {
-        // Guarda resposta errada para revisão posterior
-        respostasErradas.push({
-          pergunta: question.pergunta,
-          tuaResposta: selected,
-          correta: question.correta
-        });
-      }
-
-      current++;
-
-      // Se houver mais perguntas, mostra a próxima
-      if (current < perguntas.length) {
-        showQuestion();
-      } else {
-        // Caso contrário, mostra resultado final e revisão
-        showResult();
-      }
-    }
-
-    // Função para mostrar o resultado final e as respostas erradas
-function showResult() {
-  questionEl.textContent = "Fim do quiz!";
+  const shuffledOptions = [...q.opcoes].sort(() => Math.random() - 0.5);
   optionsEl.innerHTML = '';
-  const totalPerguntas = perguntas.length;
-  const valorPergunta = 20 / totalPerguntas;
-  const erros = respostasErradas.length;
-  const acertos = score;
-  let notaFinal = acertos * valorPergunta - erros * (valorPergunta / 3);
-  if (notaFinal < 0) notaFinal = 0;
 
-  resultEl.textContent = `Acertaste ${acertos} de ${totalPerguntas} perguntas.\nNota final: ${notaFinal.toFixed(2)} / 20`;
+  shuffledOptions.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(opt, q);
+    optionsEl.appendChild(btn);
+  });
+}
 
-  // Mostrar o wrapper
-  const wrapper = document.getElementById('review-wrapper');
-  wrapper.style.display = 'block';
-  reviewEl.innerHTML = ''; // limpa conteúdo anterior, se houver
+// ✅ NOVA FUNÇÃO COM FEEDBACK IMEDIATO
+function selectAnswer(selected, questionrn) {
+  const botoes = document.querySelectorAll('button.option');
+  botoes.forEach(btn => btn.disabled = true);
 
-  if (respostasErradas.length > 0) {
-    const reviewTitle = document.createElement('h3');
-    reviewTitle.textContent = "Respostas incorretas:";
-    reviewEl.appendChild(reviewTitle);
+  const correta = questionrn.correta;
 
-    respostasErradas.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'review-item';
-      div.innerHTML = `
-        <strong>Pergunta:</strong> ${item.pergunta}<br/>
-        <strong>A tua resposta:</strong> ${item.tuaResposta}<br/>
-        <strong>Resposta correta:</strong> ${item.correta}
-      `;
-      reviewEl.appendChild(div);
+  if (selected === correta) {
+    resultEl.textContent = "✅ Boa puto!";
+    resultEl.style.color = "green";
+    score++;
+  } else {
+    resultEl.textContent = `❌ Oof, era esta: ${correta}`;
+    resultEl.style.color = "red";
+    respostasErradas.push({
+      pergunta: questionrn.pergunta,
+      correta: correta,
+      selecionada: selected
     });
   }
 
+  botoes.forEach(btn => {
+    if (btn.textContent === correta) {
+      btn.style.backgroundColor = "#bbf7d0";
+    } else if (btn.textContent === selected) {
+      btn.style.backgroundColor = "#fecaca";
+    }
+  });
+
+  nextBtn.style.display = 'block';
+
+}
+
+// Função de revisão final
+function showReview() {
+  document.getElementById('review-wrapper').style.display = 'block';
+  questionEl.textContent = '';
+  optionsEl.innerHTML = '';
+  resultEl.textContent = `You did them all! Score: ${score}/${perguntas.length}`;
+  resultEl.style.color = "black";
+
+  if (respostasErradas.length > 0) {
+    reviewEl.innerHTML = "<h3>O que falhaste:</h3>";
+    respostasErradas.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = "review-item";
+      div.innerHTML = `<strong>${idx + 1}. ${item.pergunta}</strong><br>
+        Sua resposta: ${item.selecionada}<br>
+        Correta: ${item.correta}`;
+      reviewEl.appendChild(div);
+    });
+  } else {
+    reviewEl.innerHTML = "<p>Parabéns! You're awesome :3.</p>";
+  }
+}
+
+// Função para parar o quiz antes do fim
+function stopQuiz() {
+  document.getElementById('review-wrapper').style.display = 'block';
+  questionEl.textContent = '';
+  optionsEl.innerHTML = '';
+  resultEl.textContent = `Quiz parado! Pontuação: ${score}/${current}`;
+  resultEl.style.color = "black";
+
+  if (respostasErradas.length > 0) {
+    reviewEl.innerHTML = "<h3>Respostas incorretas até agora:</h3>";
+    respostasErradas.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = "review-item";
+      div.innerHTML = `<strong>${idx + 1}. ${item.pergunta}</strong><br>
+        Sua resposta: ${item.selecionada}<br>
+        Correta: ${item.correta}`;
+      reviewEl.appendChild(div);
+    });
+  } else {
+    reviewEl.innerHTML = "<p>Yipeeeee, estás a acertar tudo!</p>";
+  }
+
+  // Botão de reiniciar (opcional)
   const restartBtn = document.createElement('button');
-  restartBtn.id = 'restart';
-  restartBtn.textContent = 'Repetir Quiz';
-  restartBtn.onclick = restartQuiz;
+  restartBtn.id = "restart";
+  restartBtn.textContent = "Recomeçar";
+  restartBtn.onclick = () => location.reload();
   reviewEl.appendChild(restartBtn);
 }
 
-function restartQuiz() {
-  current = 0;
-  score = 0;
-  respostasErradas.length = 0;
-  reviewEl.innerHTML = '';
-  resultEl.textContent = '';
-  document.getElementById('review-wrapper').style.display = 'none';
-  showQuestion();
-}
+nextBtn.onclick = () => {
+  nextBtn.style.display = 'none';
+  current++;
+  if (current < perguntas.length) {
+    showQuestion();
+  } else {
+    showReview();
+  }
+};
 
-showQuestion(); // Inicia o quiz mostrando a primeira pergunta
+
+// Inicia o quiz
+showQuestion();
+document.getElementById('stop').onclick = stopQuiz;

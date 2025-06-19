@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T-PLay</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="quiz-container">
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div class="button-row">
+        <button id="stop">Parar</button>
+        <button id="next" style="display: none;">Próxima</button>
+    </div>
+    <div id="result" class="result"></div>
+
+
+    <!-- Envolve o review com um wrapper com scroll -->
+    <div class="review-wrapper" id="review-wrapper">
+      <div id="review" class="review"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
